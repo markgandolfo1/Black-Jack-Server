@@ -4,16 +4,23 @@
 464251
 
 Rubric turned in on time (5 points)
+
 Checked by Jeong Min Lim
 
 Languages/Frameworks used (10 points)
+
 10 - Learned/Used React frontend
 
 Functionality (75 points)
+
 10 Users can register, login, and logout
+
 10 Cards are dealt from a fair deck and are displayed correctly
+
 10 Players can place bets
+
 10 Players can hit or stay
+
 5 Players bust if their cards add up to above 21
 5 After the hand ends the winners are determined and the money is properly distributed
 15 Creator of lobby can add computer opponents that make rational decisions
