@@ -1,0 +1,19 @@
+{
+  "name": "creativeproject-module7-464887-464251",
+  "version": "1.0.0",
+  "description": "464887",
+  "main": "like_button.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://markgandolfo1@github.com/cse330-fall-2019/creativeproject-module7-464887-464251.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cse330-fall-2019/creativeproject-module7-464887-464251/issues"
+  },
+  "homepage": "https://github.com/cse330-fall-2019/creativeproject-module7-464887-464251#readme"
+}
