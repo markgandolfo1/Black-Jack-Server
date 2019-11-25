@@ -24,6 +24,10 @@ var io = socketio.listen(app);
 io.sockets.on("connection", function(socket){
     socket.room = "account";
     socket.join("account");
+    //**** */
+    // games[0] = new Object();
+    // games[0].creator = "yeay";
+    io.sockets.in(socket.id).emit("games",{games:games,test:"test"}) 
     
     socket.on("newConnection", function(data) {
         socket.leave(socket.room);
@@ -38,7 +42,7 @@ io.sockets.on("connection", function(socket){
         socket.join(data["creator"]);
         socket.room = data["creator"];
         console.log("creator is " + data["creator"]);
-        games[games.length] = new Object;
+        games[games.length] = new Object();
         games[games.length-1].creator = data["creator"];
         //can change to allow naming of games/only allowing one game per person:::
         games[games.length-1].name = data["creator"] + "'s game";
@@ -46,13 +50,7 @@ io.sockets.on("connection", function(socket){
 
         console.log("good");
         //*** */ONCE YOURE IN LOBBY THEN EMIT IN LOBBY ONLY - FIX BELOW
-        io.sockets.in("lobby").emit("joinroombtn", {creator:data["creator"], games:games});
+        io.sockets.in("lobby").emit("joinroombtn", {creator:data["creator"], games:games, test:"test"});
     });
 
-	
-	socket.on('message_to_server', function(data) {
-		
-		console.log("message: "+data["message"]); 
-		io.sockets.emit("message_to_client",{message:data["message"] }) 
-	});
 });

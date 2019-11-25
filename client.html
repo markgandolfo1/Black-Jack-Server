@@ -9,23 +9,19 @@
       
       
         let games = [];
+        let test;
+        let hi = "hi";
         let gamescounter = 0; //MIGHT NEED TO CHANGE THIS WITH A NEWCONNECT();
         var socketio = io.connect();
         // newconnect();
 
-        socketio.on("message_to_client",function(data) {
-         //Append an HR thematic break and the escaped HTML of the new message
-         document.getElementById("chatlog").appendChild(document.createElement("hr"));
-         document.getElementById("chatlog").appendChild(document.createTextNode(data['message']));
-      });
-
-
         class Game extends React.Component {
-    constructor(props) {
+        constructor(props) {
         super(props);
         this.state = {deck: createdeck(),
                     players: 2, //make an array of player objects, containing cards for each
-                    newround: true //so you know when to shuffle deck
+                    newround: true, //so you know when to shuffle deck
+                    currentgames: getGames()
         };
       }
 
@@ -33,19 +29,15 @@
 
 
     render() {
-        //const t = this.createdeck();
-        //const t = createdeck();
-        //const d = createdeck();
-
-        //return (this.props.username);
+ 
         return (
             <div>
                 {this.state.deck[0].rank}
+                
+                {this.state.currentgames}
             </div>
-
         );
     }
-
 }
 
 class Login extends React.Component {
@@ -55,52 +47,37 @@ class Login extends React.Component {
                     numberofgames:0
         };
       }
-     
-      
 
 render(){
-    console.log(this.state.numberofgames);
-    console.log(games.length);
-    if(this.state.numberofgames!=games.length){
-        console.log("ayya");
-        //change state
-        return(
-        //MAKE JOIN BTNS HERE
-        <div>
-ay
-        </div>
-    ); 
-    }
 
     if (this.state.clicked_creategame) {
 
-socketio.emit("newroom",{creator:this.props.username});
-this.state.numberofgames++;
-// socketio.on("joinroombtn", function(data){
-//     console.log("joinroombtn");
-//     return(
-//         //MAKE JOIN BTNS HERE
-//          <div>
-        
+    socketio.emit("newroom",{creator:this.props.username});
+    this.state.numberofgames++;
 
-//         <button className="gamecreated">
-//             Game created
-//         </button>
+    return (
+        <Game
+            username={this.props.username}
+        />
+    );    
+    }
 
-//         </div>
-//     );
-// //RETURN STATEMENT HERE FOR BTNS?
-// });
+    else if(this.props.games.length!=0){
+        return(
+        //MAKE JOIN BTNS HERE
+        <div>
+        <button className="creategame" onClick={() => this.setState({clicked_creategame: true })}>
+            Create New Game
+        </button>
 
-        return (
-           
-            <Game
-                username={this.props.username}
-            />
-        );
-        
-        }
+        <button className="game">
+            {this.props.games[0].creator}
+        </button>
 
+        </div>
+    );
+    }
+    else{
     return(
         //MAKE JOIN BTNS HERE
         <div>
@@ -109,12 +86,12 @@ this.state.numberofgames++;
         </button>
 
         </div>
-    );
+    );}
 }
 }
 
 class Account extends React.Component {
-  constructor(props) {
+    constructor(props) {
     super(props);
     this.state = {clicked_login: false,
                  clicked_create: false};
@@ -126,13 +103,11 @@ class Account extends React.Component {
         return (
             <Login
                 username={document.getElementById("username_input").value}
-                // onClick={() => this.handleClick(i)}
+                games = {this.props.games}
+                // onClick={() => this.handleClick()}
             />
         );
-        
-        
-        //document.getElementById("username_input").value;
-    }
+        }
 
     if (this.state.clicked_create) {
         return 'You clicked create.';
@@ -149,17 +124,22 @@ class Account extends React.Component {
         <button className="create" onClick={() => this.setState({clicked_create: true })}>
             Create
         </button>
-
         </div>
     )
   }
 }
 
-
+socketio.on("games", function(data){
+        games = data["games"];
+        test = data["test"];
+        
 ReactDOM.render(
-    <Account />,
+    <Account 
+    games = {games}
+    />,
     document.getElementById('s')
   );
+    });
 
 function createdeck(){
     let deck = [];
@@ -201,15 +181,20 @@ s++
         // function newconnect(){
         //     socketio.emit("newConnection", {user:person});}
 
-        function sendMessage(){
-            var msg = document.getElementById("message_input").value;
-            socketio.emit("message_to_server", {message:msg});
-      }
     
+      
       socketio.on("joinroombtn", function(data){
-        console.log("ye");
         games = data["games"];
+        test = data["test"];
+        console.log("ye" + games[0].creator + " " + test);
+        
     });
+
+   
+
+    function getGames(){
+        
+    }
 
 
 
@@ -220,8 +205,5 @@ s++
         <div id="s"></div>
         <!-- <script type="text/babel" src="two.js"></script> -->
 
-      <input type="text" id="message_input"/>
-      <button onclick="sendMessage()">send</button>
-      <div id="chatlog"></div>
    </body>
 </html>
