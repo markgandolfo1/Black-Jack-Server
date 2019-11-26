@@ -22,19 +22,25 @@ let games = [];
 
 var io = socketio.listen(app);
 io.sockets.on("connection", function(socket){
+    console.log("NEW");
     socket.room = "account";
     socket.join("account");
+    io.sockets.in(socket.id).emit("games",{games:games,test:"test"})
     //**** */
     // games[0] = new Object();
     // games[0].creator = "yeay";
-    io.sockets.in(socket.id).emit("games",{games:games,test:"test"}) 
+    // for(i=0;i<games.length;i++){
+    //     console.log("games #" + i + ": " + games[i].creator);
+    // }
     
     socket.on("newConnection", function(data) {
-        socket.leave(socket.room);
-        socket.join("lobby");
-        socket.room = "lobby";
         socketmap.set(data["user"], socket.id);
     });
+
+    socket.on("joinlobby", function(data) {
+    socket.leave(socket.room);
+    socket.join("lobby");
+    socket.room = "lobby";});
 
     socket.on('newroom', function(data) {
         console.log("newroom created by: " + data["creator"]);
