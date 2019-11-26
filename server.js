@@ -54,9 +54,11 @@ io.sockets.on("connection", function(socket){
         games[games.length-1].name = data["creator"] + "'s game";
         games[games.length-1].players = [data["creator"]];
 
+        io.sockets.emit("message", {creator:data["creator"], games:games, test:"test"});
         console.log("good");
+
         //*** */ONCE YOURE IN LOBBY THEN EMIT IN LOBBY ONLY - FIX BELOW
-        io.sockets.in("lobby").emit("joinroombtn", {creator:data["creator"], games:games, test:"test"});
+        //io.sockets.in("lobby").emit("joinroombtn", {creator:data["creator"], games:games, test:"test"});
     });
 
 });

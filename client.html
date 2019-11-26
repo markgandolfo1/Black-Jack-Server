@@ -21,8 +21,7 @@ class Game extends React.Component {
     super(props);
     this.state = {deck: createdeck(),
         players: 2, //make an array of player objects, containing cards for each
-        newround: true, //so you know when to shuffle deck
-        currentgames: getGames()
+        newround: true //so you know when to shuffle deck
         };
       }
 
@@ -37,6 +36,15 @@ class Game extends React.Component {
         );
     }
 }
+function Buttons(props) {
+return(
+
+    <button className="creategame" onClick={props.onClick}>
+        Create New Game
+    </button>
+
+)
+}
 
 class Login extends React.Component {
     constructor(props) {
@@ -46,17 +54,35 @@ class Login extends React.Component {
         };
       }
 
+    handleClick(){
+        this.setState({clicked_creategame: true, 
+            numberofgames: this.numberofgames+1 })
+    }
+
+    renderButtons(){
+        return(
+            <Buttons
+            onClick={() => this.handleClick()}
+            />
+        )
+    }
+
+
+
     // updatenumberofgames(){
     //     this.setState({numberofgames: this.numberofgames+1 })
     //   }
 
 render(){
+    socketio.on("message", function(data){
+        console.log("yenfwbbuegreeee");         
+    });
     
+//YOU CREATED A GAME:
     if (this.state.clicked_creategame) {
 
     socketio.emit("newroom",{creator:this.props.username});
     //updatenumberofgames();
-    //this.state.numberofgames++;
 
     return (
         <Game
@@ -65,6 +91,7 @@ render(){
     );    
     }
 
+// YOU ARE IN LOBBY AND THERE ARE GAMES:
     else if(this.props.games.length!=0){
         let gamesarray = [];
 
@@ -79,6 +106,7 @@ render(){
         return(
         //MAKE JOIN BTNS HERE
         <div>
+
         <button className="creategame" onClick={() => this.setState({clicked_creategame: true })}>
             Create New Game
         </button>
@@ -88,12 +116,13 @@ render(){
         </div>
     );
     }
+
+//YOU ARE IN LOBBY AND THERE ARE NO GAMES:
     else{
     return(
         <div>
-        <button className="creategame" onClick={() => this.setState({clicked_creategame: true })}>
-            Create New Game
-        </button>
+
+            {this.renderButtons()}
 
         </div>
     );}
@@ -193,20 +222,15 @@ s++
         //     socketio.emit("newConnection", {user:person});
         // }
 
-    
-      
-      socketio.on("joinroombtn", function(data){
-        games = data["games"];
-        test = data["test"];
-        console.log("ye" + games[0].creator + " " + test);
-        
-    });
-
    
 
-    function getGames(){
-        
-    }
+    // function getGames(){
+    //     socketio.on("joinroombtn", function(data){
+    //     games = data["games"];
+    //     test = data["test"];
+    //     console.log("yeeeee");         
+    // });
+    // }
 
 
 
