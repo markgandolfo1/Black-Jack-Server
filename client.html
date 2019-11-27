@@ -170,17 +170,27 @@ class Account extends React.Component {
     constructor(props) {
     super(props);
     this.state = {clicked_login: false,
-                 clicked_create: false};
+                 clicked_create: false,
+                games: this.props.games};
   }
 
-  render() {
+  msg(newgames){     
+        this.setState({games: newgames});
+    }
+
+render(){
+    socketio.on("updategamesaccount", (data) => {
+        this.msg(data["games"]);
+    })
+
+
     if (this.state.clicked_login) {
         socketio.emit("joinlobby", {user:document.getElementById("username_input").value});
         socketio.emit("newConnection", {user:document.getElementById("username_input").value});
         return (
             <Login
                 username={document.getElementById("username_input").value}
-                games = {this.props.games}
+                games = {this.state.games}
                 // onClick={() => this.handleClick()}
             />
         );
