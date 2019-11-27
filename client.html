@@ -50,7 +50,8 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {clicked_creategame: false,
-                    numberofgames:0
+                    numberofgames:0,
+                    games:this.props.games
         };
       }
 
@@ -67,8 +68,40 @@ class Login extends React.Component {
         )
     }
 
+    msg(newgames){
+        console.log("BJHVEBHBHVFBHDHBJDHBBHD");
+        console.log("length1: " + this.state.games.length);
+        
+        this.setState({games: newgames});
+        //console.log(numberofgames);
+        
+        console.log("length2: " + this.state.games.length);
+
+
+    }
+
 render(){
-    
+    socketio.on("updategames", (data) => {
+        console.log(data["creator"]);
+        console.log("uh:" + data["games"].length);
+        
+        this.msg(data["games"]);
+    })
+    // socketio.on("updategames", function(data){
+    //     this.msg();
+    //     console.log("fuckyes!");
+    //     console.log("yenfwbbuegreeee");
+    // })
+    // this.msg();
+    if (this.state.numberofgames==100) {
+        return(
+<div>
+    yryryfryfbrfrfbhsfjsdbhjds
+    </div>
+        );
+    }
+
+
 //YOU CREATED A GAME:
     if (this.state.clicked_creategame) {
 
@@ -83,16 +116,18 @@ render(){
     }
 
 // YOU ARE IN LOBBY AND THERE ARE GAMES:
-    else if(this.props.games.length!=0){
-        socketio.on("updategames", function(data){
-        console.log("yenfwbbuegreeee");         
-    })
+else if(this.state.games.length!=0){
+    //     socketio.on("updategames", function(data){
+    //     console.log("yenfwbbuegreeee");
+        // this.msg();
+    // })
+    console.log("notzero");
         let gamesarray = [];
 
-        for(let i=0; i<games.length; i++){
+        for(let i=0; i<this.state.games.length; i++){
             gamesarray.push(
-            <button className="game">
-                {this.props.games[i].creator}
+            <button className={i}>
+                {this.state.games[i].creator}
             </button>
 );
         }
@@ -113,17 +148,14 @@ render(){
 
 //YOU ARE IN LOBBY AND THERE ARE NO GAMES:
     else{
-        socketio.on("updategames", function(data){
-            return(
-        <div>
-        <button className="bh" onClick={() => this.setState({clicked_creategame: true })}>
-            yess
-        </button>
-  
-        </div>
-    );
-        console.log("yenfwbbuegreeee");         
-    })
+//         socketio.on("updategames", function(data){
+//             console.log("yenfwbbuegreeee");         
+//             return(
+//         <div>
+// yeeeeeeeeee
+//         </div>
+//     );
+//     })
     return(
         <div>
             {this.renderButtons()}

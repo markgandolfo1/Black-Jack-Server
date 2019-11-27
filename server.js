@@ -54,7 +54,6 @@ io.sockets.on("connection", function(socket){
         //can change to allow naming of games/only allowing one game per person:::
         games[games.length-1].name = data["creator"] + "'s game";
         games[games.length-1].players = [data["creator"]];
-
         io.sockets.in("lobby").emit("updategames", {creator:data["creator"], games:games, test:"test"});
         console.log("good");
 
