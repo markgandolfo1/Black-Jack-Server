@@ -24,7 +24,7 @@ var io = socketio.listen(app);
 io.sockets.on("connection", function(socket){
     console.log("NEW");
     socket.room = "account";
-    socket.join("account");
+    socket.join('account');
     io.sockets.in(socket.id).emit("games",{games:games,test:"test"})
     //**** */
     // games[0] = new Object();
@@ -44,9 +44,10 @@ io.sockets.on("connection", function(socket){
 
     socket.on('newroom', function(data) {
         console.log("newroom created by: " + data["creator"]);
-        socket.leave(socket.room);
-        socket.join(data["creator"]);
+        socket.leave('lobby');
         socket.room = data["creator"];
+        socket.join(data["creator"]);
+        console.log(io.sockets.adapter.sids[socket.id]);
         console.log("creator is " + data["creator"]);
         games[games.length] = new Object();
         games[games.length-1].creator = data["creator"];
@@ -54,7 +55,7 @@ io.sockets.on("connection", function(socket){
         games[games.length-1].name = data["creator"] + "'s game";
         games[games.length-1].players = [data["creator"]];
 
-        io.sockets.emit("message", {creator:data["creator"], games:games, test:"test"});
+        io.sockets.in("lobby").emit("updategames", {creator:data["creator"], games:games, test:"test"});
         console.log("good");
 
         //*** */ONCE YOURE IN LOBBY THEN EMIT IN LOBBY ONLY - FIX BELOW

@@ -67,16 +67,7 @@ class Login extends React.Component {
         )
     }
 
-
-
-    // updatenumberofgames(){
-    //     this.setState({numberofgames: this.numberofgames+1 })
-    //   }
-
 render(){
-    socketio.on("message", function(data){
-        console.log("yenfwbbuegreeee");         
-    });
     
 //YOU CREATED A GAME:
     if (this.state.clicked_creategame) {
@@ -93,6 +84,9 @@ render(){
 
 // YOU ARE IN LOBBY AND THERE ARE GAMES:
     else if(this.props.games.length!=0){
+        socketio.on("updategames", function(data){
+        console.log("yenfwbbuegreeee");         
+    })
         let gamesarray = [];
 
         for(let i=0; i<games.length; i++){
@@ -102,7 +96,6 @@ render(){
             </button>
 );
         }
-
         return(
         //MAKE JOIN BTNS HERE
         <div>
@@ -115,17 +108,29 @@ render(){
 
         </div>
     );
+    
     }
 
 //YOU ARE IN LOBBY AND THERE ARE NO GAMES:
     else{
+        socketio.on("updategames", function(data){
+            return(
+        <div>
+        <button className="bh" onClick={() => this.setState({clicked_creategame: true })}>
+            yess
+        </button>
+  
+        </div>
+    );
+        console.log("yenfwbbuegreeee");         
+    })
     return(
         <div>
-
             {this.renderButtons()}
-
         </div>
-    );}
+    );
+
+}
 }
 }
 
