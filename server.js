@@ -42,24 +42,56 @@ io.sockets.on("connection", function(socket){
     socket.join("lobby");
     socket.room = "lobby";});
 
-    socket.on('newroom', function(data) {
-        console.log("newroom created by: " + data["creator"]);
-        socket.leave('lobby');
-        socket.room = data["creator"];
-        socket.join(data["creator"]);
-        console.log(io.sockets.adapter.sids[socket.id]);
-        console.log("creator is " + data["creator"]);
-        games[games.length] = new Object();
-        games[games.length-1].creator = data["creator"];
-        //can change to allow naming of games/only allowing one game per person:::
-        games[games.length-1].name = data["creator"] + "'s game";
-        games[games.length-1].players = [data["creator"]];
-        io.sockets.in("account").emit("updategamesaccount", {creator:data["creator"], games:games, test:"test"});
-        io.sockets.in("lobby").emit("updategames", {creator:data["creator"], games:games, test:"test"});
-        console.log("good");
+    // socket.on('newroom', function(data) {
+    //     console.log("newroom created by: " + data["creator"]);
+    //     socket.leave('lobby');
+    //     socket.room = data["creator"];
+    //     socket.join(data["creator"]);
+    //     console.log(io.sockets.adapter.sids[socket.id]);
+    //     console.log("creator is " + data["creator"]);
+    //     games[games.length] = new Object();
+    //     games[games.length-1].creator = data["creator"];
+    //     //can change to allow naming of games/only allowing one game per person:::
+    //     games[games.length-1].name = data["creator"] + "'s game";
+    //     games[games.length-1].players = [data["creator"]];
+    //     io.sockets.in("account").emit("updategamesaccount", {creator:data["creator"], games:games, test:"test"});
+    //     io.sockets.in("lobby").emit("updategames", {creator:data["creator"], games:games, test:"test"});
+    //     console.log("good");
 
-        //*** */ONCE YOURE IN LOBBY THEN EMIT IN LOBBY ONLY - FIX BELOW
-        //io.sockets.in("lobby").emit("joinroombtn", {creator:data["creator"], games:games, test:"test"});
+    //     //*** */ONCE YOURE IN LOBBY THEN EMIT IN LOBBY ONLY - FIX BELOW
+    //     //io.sockets.in("lobby").emit("joinroombtn", {creator:data["creator"], games:games, test:"test"});
+    // });
+
+    socket.on('joinroom', function(data) {
+        let currentgamenumber = 0;
+        if(data["createdgame"]){
+            console.log("Newroom created by: " + data["player"]);
+            games[games.length] = new Object();
+            games[games.length-1].creator = data["player"];
+            //can change to allow naming of games/only allowing one game per person:::
+            games[games.length-1].name = data["player"] + "'s game";
+            games[games.length-1].players = [];
+        }
+        for(i=0;i<games.length;i++){
+            if(games[i].creator==data["currentgame"]){
+                currentgamenumber = i;
+                console.log("currentgamenum = " + i);
+            }
+        }
+
+        games[currentgamenumber].players.push(data["player"]); 
+        socket.leave('lobby');
+        socket.room = games[currentgamenumber].creator;
+        socket.join(games[currentgamenumber].creator);
+        console.log(io.sockets.adapter.sids[socket.id]);
+        console.log("creator is " + games[games.length-1].creator);
+
+        for(i=0;i<games[currentgamenumber].players.length;i++){
+        console.log("Player " + i + ": " + games[currentgamenumber].players[i]);
+        }
+        io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber});
+        io.sockets.in("account").emit("updategamesaccount", {games:games});
+        io.sockets.in("lobby").emit("updategames", {games:games,currentgamenumber:currentgamenumber});
     });
 
 });
