@@ -39,37 +39,48 @@ render(){
         this.msg(data["games"], data["currentgamenumber"]);
     })
 
-        let gamesarray = [];
+//         let gamesarray = [];
 
-        for(let i=0; i<this.state.games.length; i++){
-            gamesarray.push(
-            <div>
-            {this.state.games[i].creator}
-            </div>
+//         for(let i=0; i<this.state.games.length; i++){
+//             gamesarray.push(
+//             <div>
+//             {this.state.games[i].creator}
+//             </div>
+// );
+//         }
+
+let playersarray = [];
+
+if(this.state.games.length!=0){
+for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i++){
+    playersarray.push(
+    <div>
+    {this.state.games[this.state.currentgamenumber].players[i]}
+    </div>
 );
-        }
-        if(this.props.create){
+}
+}
+        
+        // if(this.props.create){
  
-        return (
-            <div>
-                {this.state.deck[0].rank}
-                {this.state.games.length}
-                {gamesarray}
+        // return (
+        //     <div>
+        //         {this.state.deck[0].rank}
+        //         {this.state.games.length}
+        //         {gamesarray}
 
-            </div>
-        );
-        }
-        else{
+        //     </div>
+        // );
+        // }
+
+        // else{
             return (
             <div>
-                {this.state.deck[0].rank}
-                {this.state.games.length}
-                {gamesarray}
                 Players:
-                {this.state.games[this.state.currentgamenumber].players[0]}
+                {playersarray}
             </div>
         );  
-        }
+        // }
     }
 }
 
