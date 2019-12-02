@@ -50,7 +50,8 @@ io.sockets.on("connection", function(socket){
 
     socket.on("updatebets", function(data) {
         console.log("BETS");
-        games[data["currentgamenumber"]].bets++;
+        if(data["bet"]>0){
+        games[data["currentgamenumber"]].bets++;}
         io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"]});
     });
 

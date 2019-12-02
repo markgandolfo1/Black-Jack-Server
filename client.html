@@ -35,7 +35,7 @@ class Game extends React.Component {
         games: this.props.games,
         clicked_startgame: false,
         bets: 0,
-        hasbet: false,
+        hasbet: 0,
         currentgamenumber: 0
         };
       }
@@ -116,6 +116,13 @@ bet(){
     let playernumber = 0;
 
     if(this.state.games.length!=0){
+        if(this.state.games[this.state.currentgamenumber].bets==this.state.games[this.state.currentgamenumber].players.length){
+            return(
+                <div>
+                    ayyy
+                </div>
+            );
+        }
         bets.push(
             <td>
             </td>
@@ -133,12 +140,13 @@ bet(){
         );
         }
 
-        if(!this.state.hasbet){
+        if(this.state.hasbet<=0){
         bets.push(
             <td>
+                <input type="text" name="bet" id="bet" placeholder="Enter amount"/>
                 <button className="bet" onClick={() => (
-                        socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber}),
-                        this.setState({hasbet:true}))}>
+                        socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber,bet:document.getElementById("bet").value}),
+                        this.setState({hasbet:document.getElementById("bet").value}))}>
                     Bet
                 </button>
             </td>
@@ -157,22 +165,12 @@ bet(){
         );
         }
 
-
-        // for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
-        //     bets.push(
-        //         <td>
-        //         <button className="bet" onClick={() => 
-        //                 socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber})}>
-        //             Bet
-        //         </button>
-        //     </td>
-        //     );
-        // }
-
     return(
         bets
     );
+
     }
+
     else{
         return(null);
     }
@@ -187,13 +185,13 @@ render(){
     if(this.state.games.length!=0){
     if(this.state.games[this.state.currentgamenumber].start){
         //if(this.state.bets==this.state.games[this.state.currentgamenumber].players.length){
-        if(this.state.games[this.state.currentgamenumber].bets==this.state.games[this.state.currentgamenumber].players.length){
-            return(
-<div>
-    ayyy
-    </div>
-            );
-        }
+//         if(this.state.games[this.state.currentgamenumber].bets==this.state.games[this.state.currentgamenumber].players.length){
+//             return(
+// <div>
+//     ayyy
+//     </div>
+//             );
+//         }
         return(
 <div>
         <table className = 'table' id = 'table'>
