@@ -33,8 +33,13 @@ class Game extends React.Component {
         players: [], //make an array of player objects, containing cards for each
         newround: true, //so you know when to shuffle deck
         games: this.props.games,
+        clicked_startgame: false,
         currentgamenumber: 0
         };
+      }
+
+      setStart(){
+          this.setState({clicked_startgame: true});
       }
 
       msg(newgames, newcurrentgamenumber){
@@ -44,7 +49,28 @@ class Game extends React.Component {
     }
 
     //this.setState({deck:shuffle(this.state.deck)});
-
+    
+renderStart(){
+    // if(this.state.clicked_startgame){
+    //     socketio.emit("startgame",{currentgamenumber:this.state.currentgamenumber});
+    // }
+    if(this.state.games.length!=0){
+        if(this.state.games[this.state.currentgamenumber].creator!=this.props.username||this.state.clicked_startgame){
+            return(null);
+        }
+        else{
+            return(
+                <button className="startgame" onClick={() => this.setState({clicked_startgame: true})}>
+                    Start Game
+                </button>
+            );
+        }
+        // if(this.state.clicked_startgame){
+        //     return("game started");
+        // }
+    
+    }
+}
 renderPlayer(){
     let p = [];
     
@@ -71,13 +97,43 @@ renderPlayer(){
 }
     
 render(){
+    let hi;
     socketio.on("updategamesgame", (data) => {
         this.msg(data["games"], data["currentgamenumber"]);
     })
+    if(this.state.games.length!=0){
+    if(this.state.games[this.state.currentgamenumber].start){
+        return(
+<div>
+    BET
+    </div>
+        );
+        hi = "hi"
+    }
+}
 
+    socketio.on("clientstart", (data) => {
+        this.msg(data["games"], data["currentgamenumber"]);
+    })
+
+
+    if(this.state.clicked_startgame){        
+        socketio.emit("startgame",{currentgamenumber:this.state.currentgamenumber});
+        return(
+<div>
+    yeeeee
+    </div>
+        );
+    }
+
+    
+    
 let playersarray = [];
 
 if(this.state.games.length!=0){
+    if(this.state.games[this.state.currentgamenumber].start){
+        hi = "hi"
+    }
 
 for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i++){
     playersarray.push(
@@ -88,19 +144,6 @@ for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i+
 }
 }
         
-        // if(this.props.create){
- 
-        // return (
-        //     <div>
-        //         {this.state.deck[0].rank}
-        //         {this.state.games.length}
-        //         {gamesarray}
-
-        //     </div>
-        // );
-        // }
-
-        // else{
             return (
             <div>
                 <table className = 'table' id = 'table'>
@@ -110,12 +153,12 @@ for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i+
                         </tr>
                     </tbody>
                 </table>
+                {this.renderStart()}
                 Players in Game:
                 {playersarray}
-                {this.state.deck[0].rank}
+                {hi}
             </div>
         );  
-        // }
     }
 }
 

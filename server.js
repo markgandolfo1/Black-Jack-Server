@@ -42,25 +42,11 @@ io.sockets.on("connection", function(socket){
     socket.join("lobby");
     socket.room = "lobby";});
 
-    // socket.on('newroom', function(data) {
-    //     console.log("newroom created by: " + data["creator"]);
-    //     socket.leave('lobby');
-    //     socket.room = data["creator"];
-    //     socket.join(data["creator"]);
-    //     console.log(io.sockets.adapter.sids[socket.id]);
-    //     console.log("creator is " + data["creator"]);
-    //     games[games.length] = new Object();
-    //     games[games.length-1].creator = data["creator"];
-    //     //can change to allow naming of games/only allowing one game per person:::
-    //     games[games.length-1].name = data["creator"] + "'s game";
-    //     games[games.length-1].players = [data["creator"]];
-    //     io.sockets.in("account").emit("updategamesaccount", {creator:data["creator"], games:games, test:"test"});
-    //     io.sockets.in("lobby").emit("updategames", {creator:data["creator"], games:games, test:"test"});
-    //     console.log("good");
-
-    //     //*** */ONCE YOURE IN LOBBY THEN EMIT IN LOBBY ONLY - FIX BELOW
-    //     //io.sockets.in("lobby").emit("joinroombtn", {creator:data["creator"], games:games, test:"test"});
-    // });
+    socket.on("startgame", function(data) {
+        console.log("startgmae");
+        games[data["currentgamenumber"]].start=true;
+        io.sockets.in(games[data["currentgamenumber"]].creator).emit("clientstart", {games:games, currentgamenumber:data["currentgamenumber"]});
+    });
 
     socket.on('joinroom', function(data) {
         let currentgamenumber = 0;
@@ -71,6 +57,7 @@ io.sockets.on("connection", function(socket){
             //can change to allow naming of games/only allowing one game per person:::
             games[games.length-1].name = data["player"] + "'s game";
             games[games.length-1].players = [];
+            games[games.length-1].start = false;
         }
         for(i=0;i<games.length;i++){
             if(games[i].creator==data["currentgame"]){
