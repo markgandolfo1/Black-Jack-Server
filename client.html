@@ -95,17 +95,67 @@ renderPlayer(){
         return(null);
     }
 }
+
+renderCards(){
+    let cards = [];
+
+    if(this.state.games.length!=0){
+        cards.push(
+
+        );
+
+
+    }
+
+}
+
+bet(){
+    let bets = [];
+
+    if(this.state.games.length!=0){
+        bets.push(
+            <td>
+            </td>
+        );
+        for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+            bets.push(
+                <td>
+                <button className="bet">
+                    Bet
+                </button>
+            </td>
+
+            );
+        }
+    return(
+        bets
+    );
+    }
+    else{
+        return(null);
+    }
+}
     
 render(){
     let hi;
     socketio.on("updategamesgame", (data) => {
         this.msg(data["games"], data["currentgamenumber"]);
     })
+
     if(this.state.games.length!=0){
     if(this.state.games[this.state.currentgamenumber].start){
         return(
 <div>
-    BET
+        <table className = 'table' id = 'table'>
+                    <tbody>
+                        <tr className = 'players' id = 'players'>
+                            {this.renderPlayer()}
+                        </tr>
+                        <tr>
+                            {this.bet()}
+                        </tr>
+                    </tbody>
+                </table>
     </div>
         );
         hi = "hi"
@@ -116,17 +166,9 @@ render(){
         this.msg(data["games"], data["currentgamenumber"]);
     })
 
-
     if(this.state.clicked_startgame){        
         socketio.emit("startgame",{currentgamenumber:this.state.currentgamenumber});
-        return(
-<div>
-    yeeeee
-    </div>
-        );
     }
-
-    
     
 let playersarray = [];
 
@@ -146,19 +188,15 @@ for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i+
         
             return (
             <div>
-                <table className = 'table' id = 'table'>
-                    <tbody>
-                        <tr className = 'players' id = 'players'>
-                            {this.renderPlayer()}
-                        </tr>
-                    </tbody>
-                </table>
-                {this.renderStart()}
-                Players in Game:
+                Players waiting in game lobby:
                 {playersarray}
-                {hi}
+                <br></br>
+                {this.renderStart()}
             </div>
-        );  
+        ); 
+        
+        
+        
     }
 }
 
