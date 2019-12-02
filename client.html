@@ -112,6 +112,7 @@ renderCards(){
 
 bet(){
     let bets = [];
+    let playernumber = 0;
 
     if(this.state.games.length!=0){
         bets.push(
@@ -119,15 +120,46 @@ bet(){
             </td>
         );
         for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+            if(this.state.games[this.state.currentgamenumber].players[i]==this.props.username){
+                playernumber = i;
+            }
+        }
+
+        for(let i=0;i<playernumber;i++){
             bets.push(
-                <td>
+            <td>
+            </td>
+        );
+        }
+
+        bets.push(
+            <td>
                 <button className="bet" onClick={() => 
                         socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber})}>
                     Bet
                 </button>
             </td>
-            );
+        );
+
+        for(let i=playernumber;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+            bets.push(
+            <td>
+            </td>
+        );
         }
+
+
+        // for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+        //     bets.push(
+        //         <td>
+        //         <button className="bet" onClick={() => 
+        //                 socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber})}>
+        //             Bet
+        //         </button>
+        //     </td>
+        //     );
+        // }
+
     return(
         bets
     );
