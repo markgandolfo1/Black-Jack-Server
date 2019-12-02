@@ -35,6 +35,7 @@ class Game extends React.Component {
         games: this.props.games,
         clicked_startgame: false,
         bets: 0,
+        hasbet: false,
         currentgamenumber: 0
         };
       }
@@ -132,15 +133,23 @@ bet(){
         );
         }
 
+        if(!this.state.hasbet){
         bets.push(
             <td>
-                <button className="bet" onClick={() => 
-                        socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber})}>
+                <button className="bet" onClick={() => (
+                        socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber}),
+                        this.setState({hasbet:true}))}>
                     Bet
                 </button>
             </td>
         );
-
+        }
+        else{
+            bets.push(
+            <td>
+            </td>
+        );  
+        }
         for(let i=playernumber;i<this.state.games[this.state.currentgamenumber].players.length;i++){
             bets.push(
             <td>
