@@ -34,6 +34,7 @@ class Game extends React.Component {
         newround: true, //so you know when to shuffle deck
         games: this.props.games,
         clicked_startgame: false,
+        bets: 0,
         currentgamenumber: 0
         };
       }
@@ -120,11 +121,10 @@ bet(){
         for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
             bets.push(
                 <td>
-                <button className="bet">
+                <button className="bet" onClick={() => this.setState({bets: this.state.bets+1})}>
                     Bet
                 </button>
             </td>
-
             );
         }
     return(
@@ -144,6 +144,13 @@ render(){
 
     if(this.state.games.length!=0){
     if(this.state.games[this.state.currentgamenumber].start){
+        if(this.state.bets==this.state.games[this.state.currentgamenumber].players.length){
+            return(
+<div>
+    ayyy
+    </div>
+            );
+        }
         return(
 <div>
         <table className = 'table' id = 'table'>
