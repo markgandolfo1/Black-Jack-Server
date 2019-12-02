@@ -51,7 +51,8 @@ io.sockets.on("connection", function(socket){
     socket.on("updatebets", function(data) {
         console.log("BETS");
         if(data["bet"]>0){
-        games[data["currentgamenumber"]].bets++;}
+        games[data["currentgamenumber"]].bets.push(data["bet"]);
+    }
         io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"]});
     });
 
@@ -65,7 +66,7 @@ io.sockets.on("connection", function(socket){
             games[games.length-1].name = data["player"] + "'s game";
             games[games.length-1].players = [];
             games[games.length-1].start = false;
-            games[games.length-1].bets = 0;
+            games[games.length-1].bets = [];
         }
         for(i=0;i<games.length;i++){
             if(games[i].creator==data["currentgame"]){

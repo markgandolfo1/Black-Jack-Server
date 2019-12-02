@@ -116,13 +116,6 @@ bet(){
     let playernumber = 0;
 
     if(this.state.games.length!=0){
-        if(this.state.games[this.state.currentgamenumber].bets==this.state.games[this.state.currentgamenumber].players.length){
-            return(
-                <div>
-                    ayyy
-                </div>
-            );
-        }
         bets.push(
             <td>
             </td>
@@ -132,7 +125,18 @@ bet(){
                 playernumber = i;
             }
         }
+        
+        if(this.state.games[this.state.currentgamenumber].bets.length==this.state.games[this.state.currentgamenumber].players.length){
+            for(let i=0;i<this.state.games[this.state.currentgamenumber].bets.length;i++){
+                bets.push(
+                    <td>
+                        {this.state.games[this.state.currentgamenumber].bets[i]}
+                    </td>
+        );
+        }
+    }
 
+        else{
         for(let i=0;i<playernumber;i++){
             bets.push(
             <td>
@@ -164,6 +168,7 @@ bet(){
             </td>
         );
         }
+    }
 
     return(
         bets
