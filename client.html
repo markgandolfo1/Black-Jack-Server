@@ -121,7 +121,8 @@ bet(){
         for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
             bets.push(
                 <td>
-                <button className="bet" onClick={() => this.setState({bets: this.state.bets+1})}>
+                <button className="bet" onClick={() => 
+                        socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber})}>
                     Bet
                 </button>
             </td>
@@ -144,7 +145,8 @@ render(){
 
     if(this.state.games.length!=0){
     if(this.state.games[this.state.currentgamenumber].start){
-        if(this.state.bets==this.state.games[this.state.currentgamenumber].players.length){
+        //if(this.state.bets==this.state.games[this.state.currentgamenumber].players.length){
+        if(this.state.games[this.state.currentgamenumber].bets==this.state.games[this.state.currentgamenumber].players.length){
             return(
 <div>
     ayyy
