@@ -49,11 +49,30 @@ io.sockets.on("connection", function(socket){
     });
 
     socket.on("updatebets", function(data) {
+        let x=-1;
         if(data["bet"]>0){
-        games[data["currentgamenumber"]].bets.push(data["bet"]);
-    
-        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:games[data["currentgamenumber"]].bets.length});
-        }
+            games[data["currentgamenumber"]].bets.push(data["bet"]);
+        
+            io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:games[data["currentgamenumber"]].bets.length,numberofcompletions:x});
+            }
+            // if(data["bet"]>0){
+            //     games[data["currentgamenumber"]].bets.push(data["bet"]);
+            
+            //     io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:games[data["currentgamenumber"]].bets.length});
+            //     }
+    });
+
+    socket.on("updatecompletions", function(data) {
+        let x=-1;
+        games[data["currentgamenumber"]].completions.push(data["result"]);   
+        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:x, numberofcompletions:games[data["currentgamenumber"]].completions.length});
+    });
+
+    socket.on("updatehits", function(data) {
+        //.hits array of values of cards that each player has
+        let x=-1;
+        games[data["currentgamenumber"]].completions.push(data["result"]);   
+        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:x, numberofcompletions:games[data["currentgamenumber"]].completions.length});
     });
 
     socket.on('joinroom', function(data) {
@@ -67,6 +86,9 @@ io.sockets.on("connection", function(socket){
             games[games.length-1].start = false;
             games[games.length-1].bets = [];
             games[games.length-1].newround = true;
+            games[games.length-1].completions = [];
+            games[games.length-1].hits = [];
+            games[games.length-1].canhit = true;
             games[games.length-1].deck = new Array(52);
 
             let s = 1;
@@ -123,7 +145,7 @@ io.sockets.on("connection", function(socket){
         socket.room = games[currentgamenumber].creator;
         socket.join(games[currentgamenumber].creator);
         let x = -1;
-        io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber, numberofbets:x});
+        io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber, numberofbets:x, numberofcompletions:x});
         io.sockets.in("account").emit("updategamesaccount", {games:games});
         io.sockets.in("lobby").emit("updategames", {games:games,currentgamenumber:currentgamenumber});
     });
@@ -144,7 +166,7 @@ io.sockets.on("connection", function(socket){
         games[data["currentgamenumber"]].newround = false;
         // console.log(games[data["currentgamenumber"]].deck);
         
-        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"], numberofbets:x});
+        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"], numberofbets:x, numberofcompletions:x});
         }
         // io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber, numberofbets:x});
     });
