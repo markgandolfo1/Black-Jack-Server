@@ -102,13 +102,35 @@ renderPlayer(){
         return(null);
     }
 }
-renderCards(){
+
+cards(){
     let cards = [];
     if(this.state.games.length!=0){
-        cards.push(
-        );
+        if(this.state.games[this.state.currentgamenumber].bets.length==this.state.games[this.state.currentgamenumber].players.length){
+            //var x =JSON.parse(JSON.stringify(this.state.games[this.state.currentgamenumber].deck[0]));
+            console.log("bhvdbhjv" + this.state.games[this.state.currentgamenumber].deck[0].suit);
+            
+            return(
+            <td>
+            {this.state.games[this.state.currentgamenumber].deck[0].rank}
+            {this.state.games[this.state.currentgamenumber].deck[0].suit}
+                </td>
+            );
+            
+
+
+        }
+
+
+
+
+        else{
+            return(null);
+        }
+
     }
 }
+
 bet(){
     let bets = [];
     let playernumber = 0;
@@ -131,6 +153,10 @@ bet(){
                     </td>
         );
         }
+
+        socketio.emit("shuffledeck",{deck:this.state.deck, currentgamenumber:this.state.currentgamenumber})
+        // let newdeck = shuffle(this.state.deck);
+        // this.setState({deck:newdeck});
     }
         else{
         for(let i=0;i<playernumber;i++){
@@ -210,6 +236,9 @@ render(){
                         </tr>
                         <tr>
                             {this.bet()}
+                        </tr>
+                        <tr>
+                            {this.cards()}
                         </tr>
                     </tbody>
                 </table>
@@ -404,7 +433,8 @@ function shuffle (oldDeck) {
 				oldDeck[j] = oldDeck[j+1];}}
 		for(let i=0; i<52; i++) {
 			oldDeck[i] = newDeck[i];
-		}
+        }
+        return newDeck;
     }
         // function newconnect(person){
         //     socketio.emit("newConnection", {user:person});

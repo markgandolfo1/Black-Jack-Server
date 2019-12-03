@@ -19,6 +19,7 @@ app.listen(3456);
 
 let socketmap = new Map();
 let games = [];
+let newround = true;
 
 var io = socketio.listen(app);
 io.sockets.on("connection", function(socket){
@@ -66,6 +67,27 @@ io.sockets.on("connection", function(socket){
             games[games.length-1].players = [];
             games[games.length-1].start = false;
             games[games.length-1].bets = [];
+            games[games.length-1].deck = new Array(52);
+
+            let s = 1;
+        for(let i=0; i<52; i=i+4){
+            games[games.length-1].deck[i] = new Object();
+            games[games.length-1].deck[i].rank = s;
+            games[games.length-1].deck[i].suit = "diamonds";
+            games[games.length-1].deck[i+1] = new Object();
+            games[games.length-1].deck[i+1].rank = s;
+            games[games.length-1].deck[i+1].suit = "clubs";
+            games[games.length-1].deck[i+2] = new Object();
+            games[games.length-1].deck[i+2].rank = s;
+            games[games.length-1].deck[i+2].suit = "hearts";
+            games[games.length-1].deck[i+3] = new Object();
+            games[games.length-1].deck[i+3].rank = s;
+            games[games.length-1].deck[i+3].suit = "spades";
+    s++
+        }
+        console.log("blahdbhbhc: " + games[games.length-1].deck[0].suit);
+        
+
         }
         for(i=0;i<games.length;i++){
             if(games[i].creator==data["currentgame"]){
@@ -82,5 +104,71 @@ io.sockets.on("connection", function(socket){
         io.sockets.in("account").emit("updategamesaccount", {games:games});
         io.sockets.in("lobby").emit("updategames", {games:games,currentgamenumber:currentgamenumber});
     });
+
+    socket.on("shuffledeck", function(data) {
+        let x = -1;
+        if(newround){
+        let deck = createdeck();
+        shuffle(deck);
+        for(i=0; i<52; i++){
+            console.log(getCard(deck[i]));
+        }
+        games[games.length-1].deck = deck;         
+        newround = false;
+        console.log(games[data["currentgamenumber"]].deck);
+        
+        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"], numberofbets:x});
+        }
+        // io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber, numberofbets:x});
+    });
+
+    function createdeck(){
+        let deck = [];
+        let s = 1;
+        for(let i=0; i<52; i=i+4){
+            deck[i] = new Object();
+            deck[i].rank = s;
+            deck[i].suit = "diamonds";
+            deck[i+1] = new Object();
+            deck[i+1].rank = s;
+            deck[i+1].suit = "clubs";
+            deck[i+2] = new Object();
+            deck[i+2].rank = s;
+            deck[i+2].suit = "hearts";
+            deck[i+3] = new Object();
+            deck[i+3].rank = s;
+            deck[i+3].suit = "spades";
+    s++
+        }
+        return deck;
+    }
+
+    function getCard(card){
+        if(card.rank == 11){
+            return "Jack of " + card.suit;
+        }
+        if(card.rank == 12){
+            return "Queen of " + card.suit;
+        }
+        if(card.rank == 13){
+            return "King of " + card.suit;
+        }
+        if(card.rank == 1){
+            return "Ace of " + card.suit;
+        }
+        return card.rank + " of " + card.suit;
+    }
+
+    function shuffle (oldDeck) {
+        let newDeck = new Array(52);
+            for (let i=newDeck.length-1; i>=0; --i) {
+                let c = parseInt((Math.random() * (i+1)));
+                newDeck[i] = oldDeck[c];
+                for (let j=c; j<newDeck.length-1; ++j) {
+                    oldDeck[j] = oldDeck[j+1];}}
+            for(let i=0; i<52; i++) {
+                oldDeck[i] = newDeck[i];
+            }
+        }
 
 });
