@@ -43,23 +43,22 @@ io.sockets.on("connection", function(socket){
     socket.room = "lobby";});
 
     socket.on("startgame", function(data) {
-        console.log("startgmae");
         games[data["currentgamenumber"]].start=true;
         io.sockets.in(games[data["currentgamenumber"]].creator).emit("clientstart", {games:games, currentgamenumber:data["currentgamenumber"]});
     });
 
     socket.on("updatebets", function(data) {
-        console.log("BETS");
         if(data["bet"]>0){
+            console.log("up bets called to add 1");       
         games[data["currentgamenumber"]].bets.push(data["bet"]);
-    }
-        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"]});
+    
+        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:games[data["currentgamenumber"]].bets.length});
+        }
     });
 
     socket.on('joinroom', function(data) {
         let currentgamenumber = 0;
         if(data["createdgame"]){
-            console.log("Newroom created by: " + data["player"]);
             games[games.length] = new Object();
             games[games.length-1].creator = data["player"];
             //can change to allow naming of games/only allowing one game per person:::
@@ -71,7 +70,6 @@ io.sockets.on("connection", function(socket){
         for(i=0;i<games.length;i++){
             if(games[i].creator==data["currentgame"]){
                 currentgamenumber = i;
-                console.log("currentgamenum = " + i);
             }
         }
 
@@ -79,13 +77,8 @@ io.sockets.on("connection", function(socket){
         socket.leave('lobby');
         socket.room = games[currentgamenumber].creator;
         socket.join(games[currentgamenumber].creator);
-        console.log(io.sockets.adapter.sids[socket.id]);
-        console.log("creator is " + games[games.length-1].creator);
-
-        for(i=0;i<games[currentgamenumber].players.length;i++){
-        console.log("Player " + i + ": " + games[currentgamenumber].players[i]);
-        }
-        io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber});
+        let x = -1;
+        io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber, numberofbets:x});
         io.sockets.in("account").emit("updategamesaccount", {games:games});
         io.sockets.in("lobby").emit("updategames", {games:games,currentgamenumber:currentgamenumber});
     });

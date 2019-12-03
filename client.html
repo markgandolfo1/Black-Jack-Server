@@ -5,7 +5,6 @@
             table {
   width: 100%;
 }
-
 /* th {
   height: 50px;
 } */
@@ -16,7 +15,6 @@
         <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
       <script src="/socket.io/socket.io.js"></script>
       <script type ="text/babel">
-
         let games = [];
         let test;
         let hi = "hi";
@@ -24,7 +22,6 @@
         var socketio = io.connect();
         
         //newconnect();
-
 class Game extends React.Component {
     
     constructor(props) {
@@ -36,20 +33,28 @@ class Game extends React.Component {
         clicked_startgame: false,
         bets: 0,
         hasbet: 0,
-        currentgamenumber: 0
+        currentgamenumber: 0,
+        currentplayernumber: 0
         };
       }
-
       setStart(){
           this.setState({clicked_startgame: true});
       }
-
-      msg(newgames, newcurrentgamenumber){
-        console.log("bjvek");
-        console.log("player:" + newgames[newcurrentgamenumber].players[0]);
-        this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players});
+      msg(newgames, newcurrentgamenumber, numbets){
+          if(numbets==-1){
+              console.log("numbets: -1");
+              
+            this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players});
+          }
+          else{
+            console.log("numbets: not -1 is actually" + numbets);
+        this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players,currentplayernumber:numbets});
+          }
+        // if(newnextplayer){
+        //     // let a = this.state.currentplayernumber+1;
+        //     this.setState({currentplayernumber:this.state.currentplayernumber+1});
+        // }
     }
-
     //this.setState({deck:shuffle(this.state.deck)});
     
 renderStart(){
@@ -97,24 +102,16 @@ renderPlayer(){
         return(null);
     }
 }
-
 renderCards(){
     let cards = [];
-
     if(this.state.games.length!=0){
         cards.push(
-
         );
-
-
     }
-
 }
-
 bet(){
     let bets = [];
     let playernumber = 0;
-
     if(this.state.games.length!=0){
         bets.push(
             <td>
@@ -135,7 +132,6 @@ bet(){
         );
         }
     }
-
         else{
         for(let i=0;i<playernumber;i++){
             bets.push(
@@ -145,6 +141,9 @@ bet(){
         }
 
         if(this.state.hasbet<=0){
+            console.log(this.state.currentplayernumber);
+            console.log(playernumber);
+            if(this.state.currentplayernumber==playernumber){
         bets.push(
             <td>
                 <input type="text" name="bet" id="bet" placeholder="Enter amount"/>
@@ -162,6 +161,13 @@ bet(){
             </td>
         );  
         }
+    }
+        else{
+            bets.push(
+            <td>
+            </td>
+        );  
+        }
         for(let i=playernumber;i<this.state.games[this.state.currentgamenumber].players.length;i++){
             bets.push(
             <td>
@@ -169,13 +175,10 @@ bet(){
         );
         }
     }
-
     return(
         bets
     );
-
     }
-
     else{
         return(null);
     }
@@ -183,10 +186,11 @@ bet(){
     
 render(){
     let hi;
-    socketio.on("updategamesgame", (data) => {
-        this.msg(data["games"], data["currentgamenumber"]);
+    socketio.on("updategamesgame", (data) => {  
+        console.log("UPDATEGAMESGAME" + data["numberofbets"]);
+              
+        this.msg(data["games"], data["currentgamenumber"],data["numberofbets"]);
     })
-
     if(this.state.games.length!=0){
     if(this.state.games[this.state.currentgamenumber].start){
         //if(this.state.bets==this.state.games[this.state.currentgamenumber].players.length){
@@ -214,22 +218,18 @@ render(){
         hi = "hi"
     }
 }
-
     socketio.on("clientstart", (data) => {
-        this.msg(data["games"], data["currentgamenumber"]);
+        this.msg(data["games"], data["currentgamenumber"], -1);
     })
-
     if(this.state.clicked_startgame){        
         socketio.emit("startgame",{currentgamenumber:this.state.currentgamenumber});
     }
     
 let playersarray = [];
-
 if(this.state.games.length!=0){
     if(this.state.games[this.state.currentgamenumber].start){
         hi = "hi"
     }
-
 for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i++){
     playersarray.push(
     <div>
@@ -252,7 +252,6 @@ for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i+
         
     }
 }
-
 function Buttons(props) {
 return(
     <button className="creategame" onClick={props.onClick}>
@@ -260,7 +259,6 @@ return(
     </button>
 )
 }
-
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -282,22 +280,16 @@ class Login extends React.Component {
             />
         )
     }
-
     msg(newgames, newcurrentgamenumber){
-        console.log("bjvek");
-        console.log("player:" + newgames[newcurrentgamenumber].players[0]);
         this.setState({games: newgames, currentgamenumber: newcurrentgamenumber});
     }
-
 render(){
     socketio.on("updategames", (data) => {
         this.msg(data["games"], data["currentgamenumber"]);
     })
-
 //YOU CREATED A GAME:
 if (this.state.clicked_joingame) {
     socketio.emit("joinroom",{player: this.props.username, currentgame: this.state.currentgame, createdgame: this.state.clicked_creategame});
-
     return (
         <Game
             username={this.props.username}
@@ -307,12 +299,9 @@ if (this.state.clicked_joingame) {
         />
     );
 }
-
 // YOU ARE IN LOBBY AND THERE ARE GAMES:
 else{ 
-
         let gamesarray = [];
-
         for(let i=0; i<this.state.games.length; i++){
             gamesarray.push(
             <button className={this.state.games[i].creator} onClick={() => this.setState({clicked_joingame: true, currentgame: this.state.games[i].creator})}>
@@ -321,22 +310,17 @@ else{
 );
         }
         return(
-
         //MAKE JOIN BTNS HERE
         <div>
-
         <button className={this.state.games.length} onClick={() => this.setState({clicked_creategame: true, clicked_joingame: true, currentgame: this.props.username})}>
             Create New Game
         </button>
-
         {gamesarray}
-
         </div>
     );
     } 
 }
 }
-
 class Account extends React.Component {
     constructor(props) {
     super(props);
@@ -379,7 +363,6 @@ render(){
     )
   }
 }
-
 socketio.on("games", function(data){
         games = data["games"];
         test = data["test"];
@@ -423,7 +406,6 @@ function shuffle (oldDeck) {
 			oldDeck[i] = newDeck[i];
 		}
     }
-
         // function newconnect(person){
         //     socketio.emit("newConnection", {user:person});
         // }
@@ -432,7 +414,6 @@ function shuffle (oldDeck) {
     //     socketio.on("joinroombtn", function(data){
     //     games = data["games"];
     //     test = data["test"];
-    //     console.log("yeeeee");         
     // });
     // }
       </script>
