@@ -165,7 +165,7 @@ io.sockets.on("connection", function(socket){
         // games[games.length-1].deck = deck;         
         games[data["currentgamenumber"]].newround = false;
         // console.log(games[data["currentgamenumber"]].deck);
-        
+        console.log(games[data["currentgamenumber"]].deck);
         io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"], numberofbets:x, numberofcompletions:x});
         }
         // io.sockets.in(games[currentgamenumber].creator).emit("updategamesgame", {games:games,currentgamenumber:currentgamenumber, numberofbets:x});

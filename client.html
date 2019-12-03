@@ -189,11 +189,18 @@ cards(){
             }
         }
             //var x =JSON.parse(JSON.stringify(this.state.games[this.state.currentgamenumber].deck[0]));
+            let j=0;
             cards.push(
                 <td>
+                {getCard(this.state.games[this.state.currentgamenumber].deck[j])}
+                {this.state.games[this.state.currentgamenumber].deck[j].value}
+                <br></br>
+                {getCard(this.state.games[this.state.currentgamenumber].deck[j+1])}
+                {this.state.games[this.state.currentgamenumber].deck[j+1].value}
+
             </td>
             );
-            let j=0;
+            j = 2
             for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
                 cards.push(
             <td>
@@ -206,10 +213,11 @@ cards(){
             );
             j=j+2;
             }
+            let currentcard = 2*(1+this.state.games[this.state.currentgamenumber].players.length);
             if(this.state.hit){
                 cards.splice(playernumber,0,
                 <td>
-                    {getCard(this.state.games[this.state.currentgamenumber].deck[0])}
+                    {getCard(this.state.games[this.state.currentgamenumber].deck[currentcard])}
                 </td>
                 );
             }
