@@ -50,12 +50,8 @@ class Game extends React.Component {
             console.log("numbets: not -1 is actually" + numbets);
         this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players,currentplayernumber:numbets});
           }
-        // if(newnextplayer){
-        //     // let a = this.state.currentplayernumber+1;
-        //     this.setState({currentplayernumber:this.state.currentplayernumber+1});
-        // }
+       
     }
-    //this.setState({deck:shuffle(this.state.deck)});
     
 renderStart(){
     // if(this.state.clicked_startgame){
@@ -109,12 +105,25 @@ cards(){
         if(this.state.games[this.state.currentgamenumber].bets.length==this.state.games[this.state.currentgamenumber].players.length){
             //var x =JSON.parse(JSON.stringify(this.state.games[this.state.currentgamenumber].deck[0]));
             console.log("bhvdbhjv" + this.state.games[this.state.currentgamenumber].deck[0].suit);
-            
-            return(
+            cards.push(
+                <td>
+            </td>
+            );
+            let j=0;
+            for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+                cards.push(
             <td>
-            {this.state.games[this.state.currentgamenumber].deck[0].rank}
-            {this.state.games[this.state.currentgamenumber].deck[0].suit}
-                </td>
+                {getCard(this.state.games[this.state.currentgamenumber].deck[j])}
+                {this.state.games[this.state.currentgamenumber].deck[j].value}
+                <br></br>
+                {getCard(this.state.games[this.state.currentgamenumber].deck[j+1])}
+                {this.state.games[this.state.currentgamenumber].deck[j+1].value}
+            </td>
+            );
+            j=j+2;
+            }
+            return(
+            cards
             );
             
 
@@ -436,6 +445,23 @@ function shuffle (oldDeck) {
         }
         return newDeck;
     }
+
+    function getCard(card){
+        if(card.rank == 11){
+            return "Jack of " + card.suit;
+        }
+        if(card.rank == 12){
+            return "Queen of " + card.suit;
+        }
+        if(card.rank == 13){
+            return "King of " + card.suit;
+        }
+        if(card.rank == 1){
+            return "Ace of " + card.suit;
+        }
+        return card.rank + " of " + card.suit;
+    }
+
         // function newconnect(person){
         //     socketio.emit("newConnection", {user:person});
         // }
