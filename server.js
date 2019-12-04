@@ -70,6 +70,7 @@ io.sockets.on("connection", function(socket){
 
     socket.on("updatehits", function(data) {
                 //DEALERS CARDS R AT 0 IN HIT ARRAY, PLAYERSCARDS R AT 1 + THEIR NUMBER IN HIT ARRAY
+                console.log("OMEBODY HIT");
         let cardsdealt = 2*(1+games[data["currentgamenumber"]].players.length);
         if(games[data["currentgamenumber"]].hits.length==0){
             for(let i=0; i<=games[data["currentgamenumber"]].players.length; i++){
@@ -92,35 +93,36 @@ io.sockets.on("connection", function(socket){
             }
         //
 
-        let currentcardnumber = cardsdealt + games[data["currentgamenumber"]].hits[data["playernumber"]+1].length - 2;
+        let currentcardnumber = cardsdealt + games[data["currentgamenumber"]].hits[data["playernumber"]+1].length + games[data["currentgamenumber"]].hits[data["playernumber"]].length -2 - 2;
         
-        games[data["currentgamenumber"]].hits[data["playernumber"]+1].push(games[data["currentgamenumber"]].deck[currentcardnumber].value);
-
-        // console.log(games[data["currentgamenumber"]].hits[data["playernumber"]+1].length);
-        
-        console.log("CURRENTCARD#:"  + currentcardnumber);
-
         let total = 0;
         for(let i=0; i<games[data["currentgamenumber"]].hits[data["playernumber"]+1].length; i++){
-            console.log("ps cards: " + games[data["currentgamenumber"]].hits[data["playernumber"]+1][i]);
-            
+            console.log("ps cards: " + games[data["currentgamenumber"]].hits[data["playernumber"]+1][i]);           
             total = total + games[data["currentgamenumber"]].hits[data["playernumber"]+1][i];
         }
         console.log("total for player " + data["playernumber"] + ": " + total);
 
-
-
-
-
-        console.log(currentcardnumber);
-        // console.log("value = " + games[data["currentgamenumber"]].hits[data["playernumber"]][0]);
+        if(total<=21){
+        games[data["currentgamenumber"]].hits[data["playernumber"]+1].push(games[data["currentgamenumber"]].deck[currentcardnumber].value);
+        }
+        // console.log(games[data["currentgamenumber"]].hits[data["playernumber"]+1].length);
         
-        //.hits array of values of cards that each player has
+        console.log("CURRENTCARD#:"  + currentcardnumber);
+
+        // let total = 0;
+        // for(let i=0; i<games[data["currentgamenumber"]].hits[data["playernumber"]+1].length; i++){
+        //     console.log("ps cards: " + games[data["currentgamenumber"]].hits[data["playernumber"]+1][i]);           
+        //     total = total + games[data["currentgamenumber"]].hits[data["playernumber"]+1][i];
+        // }
+        // console.log("total for player " + data["playernumber"] + ": " + total);
+
+
+
+        
         let x=-1;
         //games[data["currentgamenumber"]].completions.push(data["result"]);
-        console.log("OMEBODY HIT");
-        
-        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:x, numberofcompletions:games[data["currentgamenumber"]].completions.length});
+        io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:x, numberofcompletions:x});
+        // io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:x, numberofcompletions:games[data["currentgamenumber"]].completions.length});
     });
 
     socket.on('joinroom', function(data) {

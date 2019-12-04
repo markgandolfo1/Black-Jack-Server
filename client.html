@@ -22,6 +22,68 @@
         var socketio = io.connect();
         
         //newconnect();
+
+
+// class Test extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {clicked_login: false,
+//                 currentgamenumber: this.props.currentgamenumber,
+//                 games: this.props.games,
+//                 cards: []
+//             };
+//   }
+//   msg(newgames, newcurrentgamenumber, numbets, numcompletions){
+//         //   console.log("IN MSG: " + numcompletions);
+          
+//           if(numcompletions==-1){
+//           if(numbets==-1){
+//             //   console.log("numbets: -1");
+              
+//             this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players});
+//           }
+//           else{
+//             // console.log("numbets: not -1 is actually" + numbets);
+//         this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players,currentplayernumber:numbets});
+//           }
+//         }
+//         else{
+//             this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players, currentplayernumber2:numcompletions});  
+//         }
+//     }
+//         render(){
+//             socketio.on("updategamesgame", (data) => {  
+//             // console.log("UPDATEGAMESGAME" + data["numberofcompletions"]);
+              
+//             this.msg(data["games"], data["currentgamenumber"],data["numberofbets"],data["numberofcompletions"]);
+//     })
+
+//             if(this.state.games.length!=0){
+//                 if(this.state.games[this.state.currentgamenumber].start){
+//                     if(this.state.games[this.state.currentgamenumber].hits.length!=0){                        
+//                         if(this.state.games[this.state.currentgamenumber].hits[0].length!=0){
+//                            let length = this.state.games[this.state.currentgamenumber].hits[0].length; 
+//             this.state.cards.push(
+//                 <td>
+//                     hi
+//                 </td>
+//             );
+//                         return (
+                            
+//                                 this.state.cards
+                            
+//                         );
+//                     }
+//                 }
+//                 else{
+//                     return(null);
+//                 }
+//     }
+//     }
+// }
+// }
+let de = 5;
+
 class Game extends React.Component {
     
     constructor(props) {
@@ -44,16 +106,16 @@ class Game extends React.Component {
           this.setState({clicked_startgame: true});
       }
       msg(newgames, newcurrentgamenumber, numbets, numcompletions){
-          console.log("IN MSG: " + numcompletions);
+        //   console.log("IN MSG: " + numcompletions);
           
           if(numcompletions==-1){
           if(numbets==-1){
-              console.log("numbets: -1");
+            //   console.log("numbets: -1");
               
             this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players});
           }
           else{
-            console.log("numbets: not -1 is actually" + numbets);
+            // console.log("numbets: not -1 is actually" + numbets);
         this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players,currentplayernumber:numbets});
           }
         }
@@ -132,7 +194,7 @@ hitstay(){
         }
 
         if(!this.state.hasstayed){
-            console.log("not has stayed!!!!!!!!!!!!!");
+            // console.log("not has stayed!!!!!!!!!!!!!");
             console.log(playernumber);
             
             if(this.state.currentplayernumber2==playernumber){
@@ -192,21 +254,89 @@ hitcards(){
             }
         }
 
+        cards.push(
+            <td>
+            </td>
+        );
 
+        for(let i=0;i<playernumber;i++){
+            cards.push(
+            <td>
+            </td>
+        );
+        }
 
+console.log(this.state.currentplayernumber2);
 
-console.log(this.state.games[this.state.currentgamenumber].hits[playernumber][0]);
-
-            for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
-                for(let j=0;j<this.state.games[this.state.currentgamenumber].hits[playernumber].length;j++){
-                        cards.push(
-                            <td>
-                                {this.state.games[this.state.currentgamenumber].hits[playernumber][j]}
-                                <br></br>
-                            </td>
+if(this.state.currentplayernumber2+1<this.state.games[this.state.currentgamenumber].hits.length){
+if(this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length==3){
+    cards.push(
+                <td>
+                    {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][2]}
+                </td>
             );
-                }
             }
+        
+if(this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length==4){
+    cards.push(
+        <div>
+                <td>
+                    {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][2]}
+                    <br></br>
+                    {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][3]}
+                </td>
+        </div>
+            );
+            }
+
+if(this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length==5){
+    cards.push(
+        <div>
+                <td>
+                    {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][2]}
+                    <br></br>
+                    {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][3]}
+                    <br></br>
+                    {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][4]}
+                </td>
+        </div>
+            );
+            }
+        }
+
+        else{
+
+            let tot = 0;
+            for(let i=0; i<this.state.games[this.state.currentgamenumber].hits[0].length;i++){
+                tot = tot + this.state.games[this.state.currentgamenumber].hits[0][i];         
+            }
+            console.log("BOOOOOOOOORVBUVBV" + tot);
+            return("yaya");
+
+            
+        }
+        // for(let i=0;this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length;i++){
+        //     cards.push(
+        //         <td>
+        //             {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][i]}
+        //         </td>
+        //     );
+        // }
+
+
+
+// console.log(this.state.games[this.state.currentgamenumber].hits[playernumber][0]);
+
+//             for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+//                 for(let j=0;j<this.state.games[this.state.currentgamenumber].hits[playernumber].length;j++){
+//                         cards.push(
+//                             <td>
+//                                 {this.state.games[this.state.currentgamenumber].hits[playernumber][j]}
+//                                 <br></br>
+//                             </td>
+//             );
+//                 }
+//             }
             
             
             
@@ -237,6 +367,8 @@ console.log(this.state.games[this.state.currentgamenumber].hits[playernumber][0]
 
 cards(){
     let cards = [];
+    let cards2 = [];
+    let hitcards = [];
     let playernumber = 0;
     if(this.state.games.length!=0){
         if(this.state.games[this.state.currentgamenumber].bets.length==this.state.games[this.state.currentgamenumber].players.length){
@@ -245,10 +377,28 @@ cards(){
                 playernumber = i;
             }
         }
+// let k=0;
+// for(let i=0;this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length;i++){
+//             k++;
+//         }
 
+console.log("oy");
 
+        // if(this.state.games[this.state.currentgamenumber].hits.length!=0){
+        //     let length = this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length;  
+        //     console.log(this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][length-1]); 
+                      
+        //     // hitcards.push(
+        //     //     <div>
+        //     //     {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][i]}
+        //     //     <br></br>
+        //     //     </div>              
+        //     // );
+        //     // hitcards.push(
+        //     //     this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][length-1]              
+        //     // );
+        // }
     
-            //var x =JSON.parse(JSON.stringify(this.state.games[this.state.currentgamenumber].deck[0]));
             let j=0;
             cards.push(
                 <td>
@@ -257,7 +407,6 @@ cards(){
                 <br></br>
                 {getCard(this.state.games[this.state.currentgamenumber].deck[j+1])}
                 {this.state.games[this.state.currentgamenumber].deck[j+1].value}
-                <br></br>
             </td>
             );
             j = 2
@@ -269,6 +418,8 @@ cards(){
                 <br></br>
                 {getCard(this.state.games[this.state.currentgamenumber].deck[j+1])}
                 {this.state.games[this.state.currentgamenumber].deck[j+1].value}
+                <br></br>
+                {hitcards}
             </td>
             );
             j=j+2;
@@ -369,11 +520,25 @@ bet(){
         return(null);
     }
 }
+
+totals(){
+    if(this.state.games[this.state.currentgamenumber].completions.length==this.state.games[this.state.currentgamenumber].players.length){
+        let tot = 0;
+            for(let i=0; i<this.state.games[this.state.currentgamenumber].hits[0].length;i++){
+                tot = tot + this.state.games[this.state.currentgamenumber].hits[0][i];         
+            }
+    
+        return (tot);
+    }
+    else{
+        return(null);
+    }
+}
     
 render(){
     let hi;
     socketio.on("updategamesgame", (data) => {  
-        console.log("UPDATEGAMESGAME" + data["numberofcompletions"]);
+        // console.log("UPDATEGAMESGAME" + data["numberofcompletions"]);
               
         this.msg(data["games"], data["currentgamenumber"],data["numberofbets"],data["numberofcompletions"]);
     })
@@ -408,6 +573,7 @@ render(){
                         </tr>
                     </tbody>
                 </table>
+                {this.totals()}
     </div>
         );
         hi = "hi"
