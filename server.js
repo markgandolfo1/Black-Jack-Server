@@ -184,6 +184,7 @@ io.sockets.on("connection", function(socket){
     
 
         }
+        
         for(i=0;i<games.length;i++){
             if(games[i].creator==data["currentgame"]){
                 currentgamenumber = i;

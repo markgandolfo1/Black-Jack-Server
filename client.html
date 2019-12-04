@@ -134,9 +134,26 @@ renderStart(){
         }
         else{
             return(
+            <div>
+                    <h3>Add a computer if you're playing alone!</h3>
+
+                <button className="addcomputer" onClick={() => socketio.emit("joinroom",{player: "computer", currentgame: this.props.username, createdgame: false, iscomputer:true})}>
+                    Add computer
+                </button>
+                <br></br>
+                <br></br>
+                <br></br>
+
+                <h3>Click below when you're ready to start</h3>
+        
                 <button className="startgame" onClick={() => this.setState({clicked_startgame: true})}>
                     Start Game
                 </button>
+                
+
+            </div>
+
+
             );
         }
         // if(this.state.clicked_startgame){
@@ -173,6 +190,8 @@ renderPlayer(){
 hitstay(){
     let btns = [];
     let playernumber=0;
+    let computernumber=-1;
+
     if(this.state.games.length!=0){
         if(this.state.games[this.state.currentgamenumber].bets.length==this.state.games[this.state.currentgamenumber].players.length){
             btns.push(
@@ -184,7 +203,20 @@ hitstay(){
                 if(this.state.games[this.state.currentgamenumber].players[i]==this.props.username){
                     playernumber = i;
                 }
+                if(this.state.games[this.state.currentgamenumber].players[i]=='computer'){
+                    computernumber = i;                    
+                }
             }
+            console.log('PUTI');
+            
+console.log(this.state.currentplayernumber2);
+console.log(computernumber);
+
+
+            if(this.state.currentplayernumber2==computernumber){
+          console.log("PUTERPUTER");
+            
+        }
 
             for(let i=0;i<playernumber;i++){
             btns.push(
@@ -193,10 +225,14 @@ hitstay(){
         );
         }
 
+
+
         if(!this.state.hasstayed){
             // console.log("not has stayed!!!!!!!!!!!!!");
             console.log(playernumber);
             
+            
+
             if(this.state.currentplayernumber2==playernumber){
             btns.push(
                 <td>
@@ -448,6 +484,7 @@ console.log("oy");
 bet(){
     let bets = [];
     let playernumber = 0;
+    let computernumber = -1;
     if(this.state.games.length!=0){
         bets.push(
             <td>
@@ -456,6 +493,9 @@ bet(){
         for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
             if(this.state.games[this.state.currentgamenumber].players[i]==this.props.username){
                 playernumber = i;
+            }
+            if(this.state.games[this.state.currentgamenumber].players[i]=='computer'){
+                computernumber = i;
             }
         }
         
@@ -480,13 +520,19 @@ bet(){
         );
         }
 
+
+        if(this.state.currentplayernumber==computernumber){
+            socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber,bet:16,iscomputer:true});
+        }
+
+
         if(this.state.hasbet<=0){
             if(this.state.currentplayernumber==playernumber){
         bets.push(
             <td>
                 <input type="text" name="bet" id="bet" placeholder="Enter amount"/>
                 <button className="bet" onClick={() => (
-                        socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber,bet:document.getElementById("bet").value}),
+                        socketio.emit("updatebets",{currentgamenumber:this.state.currentgamenumber,bet:document.getElementById("bet").value,iscomputer:false}),
                         this.setState({hasbet:document.getElementById("bet").value}))}>
                     Bet
                 </button>
@@ -557,7 +603,8 @@ render(){
     let hi;
     socketio.on("updategamesgame", (data) => {  
         // console.log("UPDATEGAMESGAME" + data["numberofcompletions"]);
-              
+
+        
         this.msg(data["games"], data["currentgamenumber"],data["numberofbets"],data["numberofcompletions"]);
     })
     if(this.state.games.length!=0){
@@ -623,7 +670,7 @@ for(let i=0; i<this.state.games[this.state.currentgamenumber].players.length; i+
         
             return (
             <div>
-                Players waiting in game lobby:
+                <h3>Players waiting in game lobby:</h3>
                 {playersarray}
                 <br></br>
                 {this.renderStart()}
@@ -671,7 +718,7 @@ render(){
     })
 //YOU CREATED A GAME:
 if (this.state.clicked_joingame) {
-    socketio.emit("joinroom",{player: this.props.username, currentgame: this.state.currentgame, createdgame: this.state.clicked_creategame});
+    socketio.emit("joinroom",{player: this.props.username, currentgame: this.state.currentgame, createdgame: this.state.clicked_creategame, iscomputer:false});
     return (
         <Game
             username={this.props.username}
