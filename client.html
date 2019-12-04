@@ -37,7 +37,7 @@ class Game extends React.Component {
         currentplayernumber: 0,
         hasstayed:false,
         currentplayernumber2: 0,
-        hit:false
+        hashit:false
         };
       }
       setStart(){
@@ -133,13 +133,14 @@ hitstay(){
 
         if(!this.state.hasstayed){
             console.log("not has stayed!!!!!!!!!!!!!");
+            console.log(playernumber);
             
             if(this.state.currentplayernumber2==playernumber){
             btns.push(
                 <td>
                 <button className="hit" onClick={() => (
-                        socketio.emit("updatehits",{currentgamenumber:this.state.currentgamenumber,username:this.props.username}),
-                        this.setState({hit:true}))}>
+                        socketio.emit("updatehits",{currentgamenumber:this.state.currentgamenumber,username:this.props.username, playernumber:this.state.currentplayernumber2}),
+                        this.setState({hashit:true}))}>
                     Hit
                 </button>
                 <button className="stay" onClick={() => (
@@ -178,6 +179,62 @@ hitstay(){
     }
 }
 
+hitcards(){
+    let cards = [];
+    let playernumber = 0;
+    //let j=2;
+    if(this.state.games.length!=0){
+        if(this.state.games[this.state.currentgamenumber].bets.length==this.state.games[this.state.currentgamenumber].players.length){
+            if(this.state.games[this.state.currentgamenumber].hits.length!=0){
+            for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+            if(this.state.games[this.state.currentgamenumber].players[i]==this.props.username){
+                playernumber = i;
+            }
+        }
+
+
+
+
+console.log(this.state.games[this.state.currentgamenumber].hits[playernumber][0]);
+
+            for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+                for(let j=0;j<this.state.games[this.state.currentgamenumber].hits[playernumber].length;j++){
+                        cards.push(
+                            <td>
+                                {this.state.games[this.state.currentgamenumber].hits[playernumber][j]}
+                                <br></br>
+                            </td>
+            );
+                }
+            }
+            
+            
+            
+            
+            
+            // for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
+            //     cards.push(
+            // <td>
+            //     {getCard(this.state.games[this.state.currentgamenumber].deck[j])}
+            //     <br></br>
+            //     {getCard(this.state.games[this.state.currentgamenumber].deck[j+1])}
+            // </td>
+            // );
+            // j=j+2;
+            // }
+            return(cards);
+            }
+            else{
+                return(null);
+            }
+         }
+    }
+
+
+
+
+}
+
 cards(){
     let cards = [];
     let playernumber = 0;
@@ -188,6 +245,9 @@ cards(){
                 playernumber = i;
             }
         }
+
+
+    
             //var x =JSON.parse(JSON.stringify(this.state.games[this.state.currentgamenumber].deck[0]));
             let j=0;
             cards.push(
@@ -197,7 +257,7 @@ cards(){
                 <br></br>
                 {getCard(this.state.games[this.state.currentgamenumber].deck[j+1])}
                 {this.state.games[this.state.currentgamenumber].deck[j+1].value}
-
+                <br></br>
             </td>
             );
             j = 2
@@ -214,13 +274,14 @@ cards(){
             j=j+2;
             }
             let currentcard = 2*(1+this.state.games[this.state.currentgamenumber].players.length);
-            if(this.state.hit){
-                cards.splice(playernumber,0,
-                <td>
-                    {getCard(this.state.games[this.state.currentgamenumber].deck[currentcard])}
-                </td>
-                );
-            }
+            // if(this.state.hashit){
+
+            //     cards.splice(playernumber,0,
+            //     <td>
+            //         {getCard(this.state.games[this.state.currentgamenumber].deck[currentcard])}
+            //     </td>
+            //     );
+            // }
             return(
             cards
             );
@@ -338,6 +399,9 @@ render(){
                         </tr>
                         <tr>
                             {this.cards()}
+                        </tr>
+                        <tr>
+                            {this.hitcards()}
                         </tr>
                         <tr>
                             {this.hitstay()}

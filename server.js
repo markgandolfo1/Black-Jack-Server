@@ -69,9 +69,57 @@ io.sockets.on("connection", function(socket){
     });
 
     socket.on("updatehits", function(data) {
+                //DEALERS CARDS R AT 0 IN HIT ARRAY, PLAYERSCARDS R AT 1 + THEIR NUMBER IN HIT ARRAY
+        let cardsdealt = 2*(1+games[data["currentgamenumber"]].players.length);
+        if(games[data["currentgamenumber"]].hits.length==0){
+            for(let i=0; i<=games[data["currentgamenumber"]].players.length; i++){
+                games[data["currentgamenumber"]].hits[i] = [];
+                
+            }
+        }
+        //adding dealer initial cards:
+        if(games[data["currentgamenumber"]].hits[0].length == 0){
+            games[data["currentgamenumber"]].hits[0].push(games[data["currentgamenumber"]].deck[0].value);
+            games[data["currentgamenumber"]].hits[0].push(games[data["currentgamenumber"]].deck[1].value);
+        }
+        //
+
+        //adding your initial cards
+        let yourcards = 2*(1+data["playernumber"]);
+            if(games[data["currentgamenumber"]].hits[data["playernumber"]+1].length == 0){
+                games[data["currentgamenumber"]].hits[data["playernumber"]+1].push(games[data["currentgamenumber"]].deck[yourcards].value);
+                games[data["currentgamenumber"]].hits[data["playernumber"]+1].push(games[data["currentgamenumber"]].deck[yourcards+1].value);
+            }
+        //
+
+        let currentcardnumber = cardsdealt + games[data["currentgamenumber"]].hits[data["playernumber"]+1].length - 2;
+        
+        games[data["currentgamenumber"]].hits[data["playernumber"]+1].push(games[data["currentgamenumber"]].deck[currentcardnumber].value);
+
+        // console.log(games[data["currentgamenumber"]].hits[data["playernumber"]+1].length);
+        
+        console.log("CURRENTCARD#:"  + currentcardnumber);
+
+        let total = 0;
+        for(let i=0; i<games[data["currentgamenumber"]].hits[data["playernumber"]+1].length; i++){
+            console.log("ps cards: " + games[data["currentgamenumber"]].hits[data["playernumber"]+1][i]);
+            
+            total = total + games[data["currentgamenumber"]].hits[data["playernumber"]+1][i];
+        }
+        console.log("total for player " + data["playernumber"] + ": " + total);
+
+
+
+
+
+        console.log(currentcardnumber);
+        // console.log("value = " + games[data["currentgamenumber"]].hits[data["playernumber"]][0]);
+        
         //.hits array of values of cards that each player has
         let x=-1;
-        games[data["currentgamenumber"]].completions.push(data["result"]);   
+        //games[data["currentgamenumber"]].completions.push(data["result"]);
+        console.log("OMEBODY HIT");
+        
         io.sockets.in(games[data["currentgamenumber"]].creator).emit("updategamesgame", {games:games,currentgamenumber:data["currentgamenumber"],numberofbets:x, numberofcompletions:games[data["currentgamenumber"]].completions.length});
     });
 
@@ -151,7 +199,7 @@ io.sockets.on("connection", function(socket){
     });
 
     socket.on("shuffledeck", function(data) {
-        console.log("shuffle?" + r);
+        //console.log("shuffle?" + r);
         r++;
         let x = -1;
         if(games[data["currentgamenumber"]].newround){
