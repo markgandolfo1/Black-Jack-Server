@@ -524,11 +524,16 @@ bet(){
 totals(){
     if(this.state.games[this.state.currentgamenumber].completions.length==this.state.games[this.state.currentgamenumber].players.length){
         let tot = 0;
-            for(let i=0; i<this.state.games[this.state.currentgamenumber].hits[0].length;i++){
-                tot = tot + this.state.games[this.state.currentgamenumber].hits[0][i];         
+        let totarray = [];
+        for(let i=0; i<this.state.games[this.state.currentgamenumber].hits.length;i++){
+            for(let j=0; j<this.state.games[this.state.currentgamenumber].hits[i].length;j++){
+                tot = tot + this.state.games[this.state.currentgamenumber].hits[i][j];         
             }
-    
-        return (tot);
+            totarray.push(tot);
+            tot=0;
+        }
+
+        return (totarray[1]);
     }
     else{
         return(null);
