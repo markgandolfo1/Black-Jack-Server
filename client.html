@@ -201,12 +201,13 @@ hitstay(){
             btns.push(
                 <td>
                 <button className="hit" onClick={() => (
-                        socketio.emit("updatehits",{currentgamenumber:this.state.currentgamenumber,username:this.props.username, playernumber:this.state.currentplayernumber2}),
+                        socketio.emit("updatehits",{currentgamenumber:this.state.currentgamenumber,username:this.props.username, playernumber:this.state.currentplayernumber2, hit:true}),
                         this.setState({hashit:true}))}>
                     Hit
                 </button>
                 <button className="stay" onClick={() => (
                         socketio.emit("updatecompletions",{currentgamenumber:this.state.currentgamenumber,result:true}),
+                        socketio.emit("updatehits",{currentgamenumber:this.state.currentgamenumber,username:this.props.username, playernumber:this.state.currentplayernumber2, hit:false}),
                         this.setState({hasstayed:true}))}>
                     Stay
                 </button>
@@ -525,7 +526,11 @@ totals(){
     if(this.state.games[this.state.currentgamenumber].completions.length==this.state.games[this.state.currentgamenumber].players.length){
         let tot = 0;
         let totarray = [];
+        let finaltotals = [];
         for(let i=0; i<this.state.games[this.state.currentgamenumber].hits.length;i++){
+            // if(this.state.games[this.state.currentgamenumber].hits[i].length==0){
+            //     tot = 
+            // }
             for(let j=0; j<this.state.games[this.state.currentgamenumber].hits[i].length;j++){
                 tot = tot + this.state.games[this.state.currentgamenumber].hits[i][j];         
             }
@@ -533,7 +538,15 @@ totals(){
             tot=0;
         }
 
-        return (totarray[1]);
+        for(let i=0;i<totarray.length;i++){
+            finaltotals.push(
+            <td>
+                {totarray[i]}
+            </td>
+            );
+        }
+
+        return (finaltotals);
     }
     else{
         return(null);
@@ -576,9 +589,12 @@ render(){
                         <tr>
                             {this.hitstay()}
                         </tr>
+                        <tr>
+                            {this.totals()}
+                        </tr>
                     </tbody>
                 </table>
-                {this.totals()}
+                
     </div>
         );
         hi = "hi"

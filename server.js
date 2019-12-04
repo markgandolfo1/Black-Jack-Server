@@ -70,7 +70,7 @@ io.sockets.on("connection", function(socket){
 
     socket.on("updatehits", function(data) {
                 //DEALERS CARDS R AT 0 IN HIT ARRAY, PLAYERSCARDS R AT 1 + THEIR NUMBER IN HIT ARRAY
-                console.log("OMEBODY HIT");
+                console.log("SOMEBODY HIT");
         let cardsdealt = 2*(1+games[data["currentgamenumber"]].players.length);
         if(games[data["currentgamenumber"]].hits.length==0){
             for(let i=0; i<=games[data["currentgamenumber"]].players.length; i++){
@@ -102,7 +102,7 @@ io.sockets.on("connection", function(socket){
         }
         console.log("total for player " + data["playernumber"] + ": " + total);
 
-        if(total<=21){
+        if(total<=21&&data["hit"]){
         games[data["currentgamenumber"]].hits[data["playernumber"]+1].push(games[data["currentgamenumber"]].deck[currentcardnumber].value);
         }
         // console.log(games[data["currentgamenumber"]].hits[data["playernumber"]+1].length);
