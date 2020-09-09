@@ -21,64 +21,6 @@
         let gamescounter = 0; //MIGHT NEED TO CHANGE THIS WITH A NEWCONNECT();
         var socketio = io.connect();
         
-        //newconnect();
-// class Test extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {clicked_login: false,
-//                 currentgamenumber: this.props.currentgamenumber,
-//                 games: this.props.games,
-//                 cards: []
-//             };
-//   }
-//   msg(newgames, newcurrentgamenumber, numbets, numcompletions){
-//         //   console.log("IN MSG: " + numcompletions);
-          
-//           if(numcompletions==-1){
-//           if(numbets==-1){
-//             //   console.log("numbets: -1");
-              
-//             this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players});
-//           }
-//           else{
-//             // console.log("numbets: not -1 is actually" + numbets);
-//         this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players,currentplayernumber:numbets});
-//           }
-//         }
-//         else{
-//             this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players, currentplayernumber2:numcompletions});  
-//         }
-//     }
-//         render(){
-//             socketio.on("updategamesgame", (data) => {  
-//             // console.log("UPDATEGAMESGAME" + data["numberofcompletions"]);
-              
-//             this.msg(data["games"], data["currentgamenumber"],data["numberofbets"],data["numberofcompletions"]);
-//     })
-//             if(this.state.games.length!=0){
-//                 if(this.state.games[this.state.currentgamenumber].start){
-//                     if(this.state.games[this.state.currentgamenumber].hits.length!=0){                        
-//                         if(this.state.games[this.state.currentgamenumber].hits[0].length!=0){
-//                            let length = this.state.games[this.state.currentgamenumber].hits[0].length; 
-//             this.state.cards.push(
-//                 <td>
-//                     hi
-//                 </td>
-//             );
-//                         return (
-                            
-//                                 this.state.cards
-                            
-//                         );
-//                     }
-//                 }
-//                 else{
-//                     return(null);
-//                 }
-//     }
-//     }
-// }
-// }
 let de = 5;
 class Game extends React.Component {
     
@@ -102,16 +44,13 @@ class Game extends React.Component {
           this.setState({clicked_startgame: true});
       }
       msg(newgames, newcurrentgamenumber, numbets, numcompletions){
-        //   console.log("IN MSG: " + numcompletions);
           
           if(numcompletions==-1){
           if(numbets==-1){
-            //   console.log("numbets: -1");
               
             this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players});
           }
           else{
-            // console.log("numbets: not -1 is actually" + numbets);
         this.setState({games: newgames, currentgamenumber: newcurrentgamenumber, players:this.state.games.players,currentplayernumber:numbets});
           }
         }
@@ -121,9 +60,7 @@ class Game extends React.Component {
     }
     
 renderStart(){
-    // if(this.state.clicked_startgame){
-    //     socketio.emit("startgame",{currentgamenumber:this.state.currentgamenumber});
-    // }
+
     if(this.state.games.length!=0){
         if(this.state.games[this.state.currentgamenumber].creator!=this.props.username||this.state.clicked_startgame){
             return(null);
@@ -147,9 +84,6 @@ renderStart(){
             </div>
             );
         }
-        // if(this.state.clicked_startgame){
-        //     return("game started");
-        // }
     
     }
 }
@@ -323,39 +257,7 @@ if(this.state.games[this.state.currentgamenumber].hits[this.state.currentplayern
             return("yaya");
             
         }
-        // for(let i=0;this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length;i++){
-        //     cards.push(
-        //         <td>
-        //             {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][i]}
-        //         </td>
-        //     );
-        // }
-// console.log(this.state.games[this.state.currentgamenumber].hits[playernumber][0]);
-//             for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
-//                 for(let j=0;j<this.state.games[this.state.currentgamenumber].hits[playernumber].length;j++){
-//                         cards.push(
-//                             <td>
-//                                 {this.state.games[this.state.currentgamenumber].hits[playernumber][j]}
-//                                 <br></br>
-//                             </td>
-//             );
-//                 }
-//             }
-            
-            
-            
-            
-            
-            // for(let i=0;i<this.state.games[this.state.currentgamenumber].players.length;i++){
-            //     cards.push(
-            // <td>
-            //     {getCard(this.state.games[this.state.currentgamenumber].deck[j])}
-            //     <br></br>
-            //     {getCard(this.state.games[this.state.currentgamenumber].deck[j+1])}
-            // </td>
-            // );
-            // j=j+2;
-            // }
+
             return(cards);
             }
             else{
@@ -376,26 +278,8 @@ cards(){
                 playernumber = i;
             }
         }
-// let k=0;
-// for(let i=0;this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length;i++){
-//             k++;
-//         }
-console.log("oy");
-        // if(this.state.games[this.state.currentgamenumber].hits.length!=0){
-        //     let length = this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1].length;  
-        //     console.log(this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][length-1]); 
-                      
-        //     // hitcards.push(
-        //     //     <div>
-        //     //     {this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][i]}
-        //     //     <br></br>
-        //     //     </div>              
-        //     // );
-        //     // hitcards.push(
-        //     //     this.state.games[this.state.currentgamenumber].hits[this.state.currentplayernumber2+1][length-1]              
-        //     // );
-        // }
-    
+
+
             let j=0;
             cards.push(
                 <td>
@@ -422,13 +306,7 @@ console.log("oy");
             j=j+2;
             }
             let currentcard = 2*(1+this.state.games[this.state.currentgamenumber].players.length);
-            // if(this.state.hashit){
-            //     cards.splice(playernumber,0,
-            //     <td>
-            //         {getCard(this.state.games[this.state.currentgamenumber].deck[currentcard])}
-            //     </td>
-            //     );
-            // }
+ 
             return(
             cards
             );
@@ -525,9 +403,7 @@ totals(){
         let totarray = [];
         let finaltotals = [];
         for(let i=0; i<this.state.games[this.state.currentgamenumber].hits.length;i++){
-            // if(this.state.games[this.state.currentgamenumber].hits[i].length==0){
-            //     tot = 
-            // }
+
             for(let j=0; j<this.state.games[this.state.currentgamenumber].hits[i].length;j++){
                 tot = tot + this.state.games[this.state.currentgamenumber].hits[i][j];         
             }
@@ -557,14 +433,7 @@ render(){
     })
     if(this.state.games.length!=0){
     if(this.state.games[this.state.currentgamenumber].start){
-        //if(this.state.bets==this.state.games[this.state.currentgamenumber].players.length){
-//         if(this.state.games[this.state.currentgamenumber].bets==this.state.games[this.state.currentgamenumber].players.length){
-//             return(
-// <div>
-//     ayyy
-//     </div>
-//             );
-//         }
+
         return(
 <div>
         <table className = 'table' id = 'table'>
@@ -799,16 +668,7 @@ function shuffle (oldDeck) {
         }
         return card.rank + " of " + card.suit;
     }
-        // function newconnect(person){
-        //     socketio.emit("newConnection", {user:person});
-        // }
-   
-    // function getGames(){
-    //     socketio.on("joinroombtn", function(data){
-    //     games = data["games"];
-    //     test = data["test"];
-    // });
-    // }
+
       </script>
    </head>
    <body>
