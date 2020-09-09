@@ -1,42 +1,20 @@
-# CSE330
-464887
-
-464251
+Black Jack server where users can log onto accounts and play by themselves, with friends, or with random people.
 
 
-Rubric turned in on time (5 points)
+Used React on the frontend and Socket.IO on the backend, long with Javascript, HTML, and MySQL.
 
-    Checked by Jeong Min Lim
+Functionality:
 
+    - Users can register, login, and logout
 
-Languages/Frameworks used (10 points)
+    - Cards are dealt from a fair deck and are displayed correctly
 
-    10 - Learned/Used React frontend
+    - Players can place bets
 
-Functionality (75 points)
+    - Players can hit or stay
 
-    10 Users can register, login, and logout
+    - Players bust if their cards add up to above 21
 
-    10 Cards are dealt from a fair deck and are displayed correctly
+    - After the hand ends the winners are determined and the money is properly distributed
 
-    10 Players can place bets
-
-    10 Players can hit or stay
-
-    5 Players bust if their cards add up to above 21
-
-    5 After the hand ends the winners are determined and the money is properly distributed
-
-    15 Creator of lobby can add computer opponents that make rational decisions
-
-    10 Database contains Users, Passwords, and Money with the necessary columns and column types to maintain the above functionality
-
-
-Best Practices (5 points)
-
-    3 Code is readable and well formatted
-
-    2 All pages pass the html validator
-
-
-Creative Portion (5 points)
+    - Database contains Users, Passwords, and Money with the necessary columns and column types to maintain the above functionality
